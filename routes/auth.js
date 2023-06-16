@@ -232,4 +232,47 @@ router.delete('/api/tasks/:taskId', (req, res) => {
     });
 });
 
+router.put('/api/tasks/:taskId', (req, res) => {
+    if (!req.session || !req.session.user || !req.session.active) {
+        res.status(401).send('Unauthorized');
+        return;
+    }
+
+    const email = req.session.user;
+    const taskId = req.params.taskId;
+    const { title } = req.body;
+
+    // Get the user's ID based on their email
+    pool.query('SELECT id FROM users WHERE email = ?', [email], (error, results) => {
+        if (error) {
+            console.error(error);
+            res.status(500).send('Internal Server Error');
+            return;
+        }
+
+        if (results.length === 0) {
+            res.status(404).send('User not found');
+            return;
+        }
+
+        const userId = results[0].id;
+
+        // Update the task title with the specified ID and user ID
+        pool.query('UPDATE tasks SET title = ? WHERE id = ? AND user_id = ?', [title, taskId, userId], (error, results) => {
+            if (error) {
+                console.error(error);
+                res.status(500).send('Internal Server Error');
+                return;
+            }
+
+            if (results.affectedRows === 0) {
+                res.status(404).send('Task not found');
+                return;
+            }
+
+            res.status(204).send('Task updated successfully');
+        });
+    });
+});
+
 export default router;

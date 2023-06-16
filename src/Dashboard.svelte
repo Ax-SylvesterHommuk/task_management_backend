@@ -88,6 +88,32 @@
         }
     };
 
+    const editTask = async (task) => {
+        const newTitle = prompt('Enter a new title for the task:', task.title);
+
+        if (newTitle) {
+            try {
+                const response = await fetch(`/api/tasks/${task.id}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ title: newTitle }),
+                    credentials: 'include',
+                });
+
+                if (response.ok) {
+                    await getTasks();
+                    console.log('Task updated successfully!');
+                } else {
+                    console.error('Error updating task');
+                }
+            } catch (error) {
+                console.error(error);
+            }
+        }
+    };
+
     const logout = async () => {
         try {
             const response = await fetch('/api/sessions', {
@@ -134,6 +160,7 @@
                     <li>
                         <div class="task-name">{task.title}</div>
                         <div class="task-actions">
+                            <button class="btn btn-success" on:click="{() => editTask(task)}">Edit</button>
                             <button class="btn btn-danger" on:click="{() => deleteTask(task.id)}">Delete</button>
                         </div>
                     </li>
