@@ -12,6 +12,98 @@ components:
       name: sessionId
 
 paths:
+  /api/sessions:
+    get:
+      summary: Retrieve user and session information
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  user:
+                    type: string
+                  sessionId:
+                    type: string
+              examples:
+                UserSession:
+                  value:
+                    user: john.doe@example.com
+                    sessionId: 1234567890
+        '401':
+          description: Unauthorized
+          content:
+            text/html:
+              schema:
+                type: string
+              example: Unauthorized
+
+    post:
+      summary: Log in a user and create a session
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                password:
+                  type: string
+            example:
+              email: john.doe@example.com
+              password: password123
+      responses:
+        '200':
+          description: Session created
+          content:
+            text/html:
+              schema:
+                type: string
+              example: Logged in successfully
+        '400':
+          description: Bad Request
+          content:
+            text/html:
+              schema:
+                type: string
+              example: Email and password are required
+        '401':
+          description: Unauthorized
+          content:
+            text/html:
+              schema:
+                type: string
+              example: Invalid email or password
+
+    delete:
+      summary: Log out the current user and end the session
+      responses:
+        '200':
+          description: Session destroyed successfully
+          content:
+            text/html:
+              schema:
+                type: string
+              example: Session destroyed successfully
+        '401':
+          description: Unauthorized
+          content:
+            text/html:
+              schema:
+                type: string
+              example: Either session has expired or you are not logged in
+        '500':
+          description: Internal Server Error
+          content:
+            text/html:
+              schema:
+                type: string
+              example: Internal Server Error
+
   /api/users:
     post:
       summary: Create a new user

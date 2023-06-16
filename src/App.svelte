@@ -1,6 +1,7 @@
 <script>
 	import { onMount, onDestroy } from "svelte";
 	import CreateAccountForm from "./CreateAccountForm.svelte";
+	import Dashboard from "./Dashboard.svelte";
 	import LoginForm from "./LoginForm.svelte";
 
 	export let loggedIn;
@@ -39,17 +40,21 @@
 </script>
 
 <main>
-	<div class="form-container">
-		{#if showLoginForm}
-			<LoginForm {loggedIn}/>
-		{:else}
-			<CreateAccountForm/>
-		{/if}
-	</div>
-	<div class="button-container">
-		<button class="{showLoginForm ? 'active' : ''}" on:click="{() => { showLoginForm = true; login(); }}">Login</button>
-		<button class="{showLoginForm ? '' : 'active'}" on:click="{() => { showLoginForm = false; login(); }}">Create Account</button>
-	</div>
+	{#if loggedIn}
+		<Dashboard/>
+	{:else}
+		<div class="form-container">
+			{#if showLoginForm}
+				<LoginForm {loggedIn}/>
+			{:else}
+				<CreateAccountForm/>
+			{/if}
+		</div>
+		<div class="button-container">
+			<button class="{showLoginForm ? 'active' : ''}" on:click="{() => { showLoginForm = true; login(); }}">Login</button>
+			<button class="{showLoginForm ? '' : 'active'}" on:click="{() => { showLoginForm = false; login(); }}">Create Account</button>
+		</div>
+	{/if}
 </main>
 
 <style>
