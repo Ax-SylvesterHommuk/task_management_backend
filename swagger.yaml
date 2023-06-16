@@ -145,6 +145,51 @@ paths:
               example: An account with this email already exists
 
   /api/tasks:
+    post:
+      summary: Create a new task
+      security:
+        - cookieAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+            example:
+              title: Task 1
+      responses:
+        '201':
+          description: Created
+          content:
+            text/html:
+              schema:
+                type: string
+              example: Task created successfully
+        '400':
+          description: Bad Request
+          content:
+            text/html:
+              schema:
+                type: string
+              example: Bad Request
+        '401':
+          description: Unauthorized
+          content:
+            text/html:
+              schema:
+                type: string
+              example: Unauthorized
+        '500':
+          description: Internal Server Error
+          content:
+            text/html:
+              schema:
+                type: string
+              example: Internal Server Error
+
     get:
       summary: Get all tasks for a user
       security:

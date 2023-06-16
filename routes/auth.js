@@ -117,6 +117,43 @@ router.delete('/api/sessions', (req, res) => {
 });
 
 // Tasks API
+router.post('/api/tasks', (req, res) => {
+    if (!req.session || !req.session.user || !req.session.active) {
+        res.status(401).send('Unauthorized');
+        return;
+    }
+
+    const email = req.session.user;
+    const { title } = req.body;
+
+    // Get the user's ID based on their email
+    pool.query('SELECT id FROM users WHERE email = ?', [email], (error, results) => {
+        if (error) {
+            console.error(error);
+            res.status(500).send('Internal Server Error');
+            return;
+        }
+
+        if (results.length === 0) {
+            res.status(404).send('User not found');
+            return;
+        }
+
+        const userId = results[0].id;
+
+        // Insert the task into the tasks table
+        pool.query('INSERT INTO tasks (title, user_id) VALUES (?, ?)', [title, userId], (error) => {
+            if (error) {
+                console.error(error);
+                res.status(500).send('Internal Server Error');
+                return;
+            }
+
+            res.status(201).send('Task created successfully');
+        });
+    });
+});
+
 router.get('/api/tasks', (req, res) => {
     if (!req.session || !req.session.user || !req.session.active) {
         res.status(401).send('Unauthorized');

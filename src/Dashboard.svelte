@@ -29,6 +29,30 @@
 
     let tasks = [];
 
+    const addTask = async () => {
+        try {
+            const response = await fetch('/api/tasks', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ title: taskTitle }),
+                credentials: 'include',
+            });
+
+            await getTasks();
+            taskTitle = '';
+
+            if (response.ok) {
+                console.log('Task added successfully!');
+            } else {
+                console.error('Error adding task');
+            }
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
     const getTasks = async () => {
         try {
             const response = await fetch('/api/tasks', {
@@ -77,6 +101,10 @@
                     <label for="task-title" class="form-label">Task Title</label>
                     <input type="text" class="form-control" id="task-title" bind:value="{taskTitle}" required>
                 </div>
+
+                <button type="button" class="btn btn-primary" on:click="{addTask}">
+                    Add Task
+                </button>
             </form>
         </div>
 
