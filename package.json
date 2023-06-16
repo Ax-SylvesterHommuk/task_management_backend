@@ -1,28 +1,35 @@
 {
-  "name": "backend",
+  "name": "taskmanagementbackend",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "private": true,
+  "type": "module",
   "scripts": {
-    "start": "nodemon -e js,json,yaml index.js"
+    "build": "rollup -c",
+    "dev": "rollup -c -w",
+    "start": "nodemon -e js,yaml,json,svelte,sh,mjs --ignore public/ --exec \"npm run build && node index.mjs\""
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/henno/backend.git"
+  "devDependencies": {
+    "@rollup/plugin-commonjs": "^24.0.0",
+    "@rollup/plugin-node-resolve": "^15.0.0",
+    "@rollup/plugin-terser": "^0.4.0",
+    "rollup": "^3.15.0",
+    "rollup-plugin-css-only": "^4.3.0",
+    "rollup-plugin-livereload": "^2.0.0",
+    "rollup-plugin-svelte": "^7.1.2",
+    "svelte": "^3.55.0",
+    "svelte-routing": "^1.10.0"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/henno/backend/issues"
-  },
-  "homepage": "https://github.com/henno/backend#readme",
   "dependencies": {
     "bcrypt": "^5.1.0",
-    "dotenv": "^16.0.3",
+    "cors": "^2.8.5",
+    "dotenv": "^16.1.4",
     "express": "^4.18.2",
-    "nodemon": "^2.0.20",
-    "swagger-ui-express": "^4.6.0",
+    "express-session": "^1.17.3",
+    "mysql": "^2.18.1",
+    "nodemon": "^2.0.22",
+    "sirv-cli": "^2.0.0",
+    "swagger-ui-express": "^4.6.3",
+    "uuid": "^9.0.0",
     "yamljs": "^0.3.0"
   }
 }

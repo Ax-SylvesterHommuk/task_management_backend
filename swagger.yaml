@@ -1,5 +1,53 @@
 openapi: 3.0.2
 info:
-  title: ITA21
+  title: Task Management API
   version: 1.0.0
-  description: Demonstration API
+  description: Task Management API and its documentation. Simply log in at https://localhost:3000/ to acquire the cookie session authentication.
+
+components:
+  securitySchemes:
+    cookieAuth:
+      type: apiKey
+      in: cookie
+      name: sessionId
+
+paths:
+  /api/users:
+    post:
+      summary: Create a new user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                password:
+                  type: string
+            example:
+              email: john.doe@example.com
+              password: password123
+      responses:
+        '201':
+          description: Created
+          content:
+            text/html:
+              schema:
+                type: string
+              example: Account created successfully
+        '400':
+          description: Bad Request
+          content:
+            text/html:
+              schema:
+                type: string
+              example: Email and password are required
+        '409':
+          description: Conflict
+          content:
+            text/html:
+              schema:
+                type: string
+              example: An account with this email already exists
