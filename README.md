@@ -8,6 +8,9 @@ Download MySQL from the official website: https://dev.mysql.com/downloads/ - onl
 - Go to URL http://localhost:3000 to view the website
 - - The API documentation is located at http://localhost:3000/api/docs/
 
+# Panel
+![Image](https://media.discordapp.net/attachments/895333413060493342/1118482998396989450/image.png?width=1440&height=658)
+
 # Acknowledgments
 
 * [Express](https://expressjs.com/) for the web framework.
