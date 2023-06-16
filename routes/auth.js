@@ -190,4 +190,46 @@ router.get('/api/tasks', (req, res) => {
     });
 });
 
+router.delete('/api/tasks/:taskId', (req, res) => {
+    if (!req.session || !req.session.user || !req.session.active) {
+        res.status(401).send('Unauthorized');
+        return;
+    }
+
+    const email = req.session.user;
+    const taskId = req.params.taskId;
+
+    // Get the user's ID based on their email
+    pool.query('SELECT id FROM users WHERE email = ?', [email], (error, results) => {
+        if (error) {
+            console.error(error);
+            res.status(500).send('Internal Server Error');
+            return;
+        }
+
+        if (results.length === 0) {
+            res.status(404).send('User not found');
+            return;
+        }
+
+        const userId = results[0].id;
+
+        // Delete the task with the specified ID and user ID
+        pool.query('DELETE FROM tasks WHERE id = ? AND user_id = ?', [taskId, userId], (error, results) => {
+            if (error) {
+                console.error(error);
+                res.status(500).send('Internal Server Error');
+                return;
+            }
+
+            if (results.affectedRows === 0) {
+                res.status(404).send('Task not found');
+                return;
+            }
+
+            res.status(204).send('Task deleted successfully');
+        });
+    });
+});
+
 export default router;

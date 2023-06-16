@@ -70,6 +70,24 @@
         }
     };
 
+    const deleteTask = async (taskId) => {
+        try {
+            const response = await fetch(`/api/tasks/${taskId}`, {
+                method: 'DELETE',
+                credentials: 'include'
+            });
+
+            if (response.ok) {
+                // Call getTasks() to fetch the updated task list
+                await getTasks();
+            } else {
+                console.error('Error deleting task');
+            }
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
     const logout = async () => {
         try {
             const response = await fetch('/api/sessions', {
@@ -115,6 +133,9 @@
                 {#each tasks as task}
                     <li>
                         <div class="task-name">{task.title}</div>
+                        <div class="task-actions">
+                            <button class="btn btn-danger" on:click="{() => deleteTask(task.id)}">Delete</button>
+                        </div>
                     </li>
                 {/each}
             </ul>
@@ -169,6 +190,11 @@
         padding: 0.5rem;
         border: 1px solid #ccc;
         border-radius: 4px;
+    }
+
+    .task-actions {
+        display: flex;
+        gap: 0.5rem;
     }
 
     .form-control {
